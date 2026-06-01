@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport">
+    <title>Ping Paris | Find Your Table</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- React & Related Libraries -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/history@5/umd/history.development.js"></script>
+    <script src="https://unpkg.com/react-router@6.3.0/umd/react-router.development.js"></script>
+    <script src="https://unpkg.com/react-router-dom@6.3.0/umd/react-router-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-high": "#eae7e7",
+                    "on-tertiary-container": "#f3ffff",
+                    "error-container": "#ffdad6",
+                    "on-error": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "surface-container-highest": "#e5e2e1",
+                    "on-surface": "#1b1c1c",
+                    "outline": "#906f70",
+                    "on-background": "#1b1c1c",
+                    "inverse-surface": "#303030",
+                    "on-primary-fixed-variant": "#920029",
+                    "on-tertiary-fixed-variant": "#004f52",
+                    "surface": "#fcf9f8",
+                    "primary-container": "#e21e4a",
+                    "secondary-container": "#026aff",
+                    "tertiary-container": "#008287",
+                    "on-secondary-fixed-variant": "#0040a1",
+                    "primary": "#ba0036",
+                    "secondary-fixed-dim": "#b2c5ff",
+                    "surface-tint": "#be0038",
+                    "surface-variant": "#e5e2e1",
+                    "background": "#fcf9f8",
+                    "tertiary-fixed": "#91f2f7",
+                    "on-surface-variant": "#5c3f41",
+                    "on-tertiary": "#ffffff",
+                    "outline-variant": "#e5bdbe",
+                    "inverse-on-surface": "#f3f0ef",
+                    "primary-fixed": "#ffdada",
+                    "error": "#ba1a1a",
+                    "on-secondary-container": "#fefcff",
+                    "on-secondary-fixed": "#001847",
+                    "on-primary-fixed": "#40000d",
+                    "surface-dim": "#dcd9d9",
+                    "on-tertiary-fixed": "#002021",
+                    "on-secondary": "#ffffff",
+                    "surface-bright": "#fcf9f8",
+                    "inverse-primary": "#ffb2b6",
+                    "on-primary-container": "#fffbff",
+                    "tertiary": "#00676b",
+                    "primary-fixed-dim": "#ffb2b6",
+                    "secondary": "#0054cc",
+                    "surface-container-low": "#f6f3f2",
+                    "secondary-fixed": "#dae2ff",
+                    "on-primary": "#ffffff",
+                    "surface-container": "#f0eded",
+                    "tertiary-fixed-dim": "#74d6db",
+                    "surface-container-lowest": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "base": "8px",
+                    "gutter": "24px",
+                    "container-max": "1280px",
+                    "margin-mobile": "20px",
+                    "margin-desktop": "80px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "body-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display": ["Plus Jakarta Sans"],
+                    "body-lg": ["Inter"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"],
+                    "label-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-lg": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "30px", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["26px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "16px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        .hero-gradient {
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.4) 100%);
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .marker-pulse::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(186, 0, 54, 0.4);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+        .map-gradient {
+            background: linear-gradient(180deg, rgba(252,249,248,0.8) 0%, rgba(252,249,248,0) 20%, rgba(252,249,248,0) 80%, rgba(252,249,248,0.8) 100%);
+        }
+        .snap-x { scroll-snap-type: x mandatory; }
+        .snap-center { scroll-snap-align: center; }
+        .ripple {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+        @keyframes ripple {
+            to { transform: scale(4); opacity: 0; }
+        }
+        body {
+            min-height: 100dvh;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+
+    <!-- Leaflet CSS & JS for interactive map -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  </head>
+<body class="bg-surface text-on-surface font-body-md antialiased">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { createRoot } = ReactDOM;
+        const { MemoryRouter, Routes, Route, Link, useNavigate, useLocation, useParams } = ReactRouterDOM;
+
+        // --- Shared Components ---
+
+        const TopAppBar = () => {
+            const navigate = useNavigate();
+            return (
+                <header className="flex items-center justify-between px-margin-mobile md:px-margin-desktop h-16 w-full z-50 sticky top-0 bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline">
+                    <Link to="/map" className="flex items-center gap-2">
+                        <span className="material-symbols-outlined text-primary dark:text-primary-fixed" style={{fontVariationSettings: "'FILL' 1"}}>sports_tennis</span>
+                        <h1 className="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">Ping Paris</h1>
+                    </Link>
+                    <button className="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-low transition-colors p-2 rounded-full active:scale-95">settings</button>
+                </header>
+            );
+        };
+
+        const BottomNavBar = () => {
+            const location = useLocation();
+            const getActiveStyles = (path) => location.pathname === path 
+                ? "text-primary dark:text-primary-fixed font-bold bg-primary-fixed dark:bg-primary-container rounded-full px-4 py-1" 
+                : "text-on-surface-variant hover:bg-surface-container-high transition-all";
+
+            return (
+                <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-20 px-4 pb-safe bg-surface dark:bg-surface-container-lowest border-t border-outline-variant dark:border-outline shadow-lg">
+                    <Link to="/map" className={`flex flex-col items-center justify-center ${getActiveStyles('/map')} active:scale-90 transition-transform`}>
+                        <span className="material-symbols-outlined" style={{fontVariationSettings: location.pathname === '/map' ? "'FILL' 1" : ""}}>map</span>
+                        <span className="font-label-sm text-label-sm">Map</span>
+                    </Link>
+                    <Link to="/explore" className={`flex flex-col items-center justify-center ${getActiveStyles('/explore')} active:scale-90 transition-transform`}>
+                        <span className="material-symbols-outlined" style={{fontVariationSettings: location.pathname === '/explore' ? "'FILL' 1" : ""}}>explore</span>
+                        <span className="font-label-sm text-label-sm">Explore</span>
+                    </Link>
+                    <Link to="/profile" className={`flex flex-col items-center justify-center ${getActiveStyles('/profile')} active:scale-90 transition-transform`}>
+                        <span className="material-symbols-outlined" style={{fontVariationSettings: location.pathname === '/profile' ? "'FILL' 1" : ""}}>person</span>
+                        <span className="font-label-sm text-label-sm">Profile</span>
+                    </Link>
+                </nav>
+            );
+        };
+
+        // --- Screen 1: Onboarding ---
+        const OnboardingPage = () => {
+            const navigate = useNavigate();
+            return (
+                <div className="relative min-h-screen overflow-hidden">
+                    <div className="fixed inset-0 z-0">
+                        <img alt="Paris Landscape" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFDYbXkF9pesqOXUEbS48cGNRofDMEZNYHXIePLHZb3fnuzcJX1NsdIkBHg2XThuq0azHiaCrphjc1gA8mm2vFutMmUm8i_NG7GrCnWDrdKIFu1r9B9HXISOOQpHuWZt8HhGXRNwiBFX8DhQxCFzf6nlIQTUDg51mH6YydnKbssfpBm5lnIoUAnZzzR71oOd06U9gN4AQay5VcJ6aGlyV5h-tmU4ihsaREYQdGoXa-RRWa6sX11Rlzg8YAdDP3xofFXXqltYF0koMl" />
+                        <div className="absolute inset-0 hero-gradient"></div>
+                    </div>
+                    <main className="relative z-10 flex min-h-screen items-center justify-center px-margin-mobile">
+                        <section className="glass-panel w-full max-w-[440px] rounded-3xl p-8 md:p-10 shadow-2xl flex flex-col items-center text-center border border-white/20 animate-in fade-in zoom-in duration-700">
+                            <div className="mb-8 p-4 bg-primary/10 rounded-full">
+                                <span className="material-symbols-outlined text-primary text-4xl">sports_tennis</span>
+                            </div>
+                            <h1 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-3 tracking-tight">
+                                Find your table. Meet your match.
+                            </h1>
+                            <p className="font-body-md text-body-md text-on-surface-variant mb-8 px-2">
+                                Join the most active street sports community in Paris.
+                            </p>
+                            <div className="grid grid-cols-2 gap-4 w-full mb-10">
+                                <div className="bg-surface-container-low border border-outline-variant p-4 rounded-2xl">
+                                    <div className="font-headline-md text-headline-md text-primary">500+</div>
+                                    <div className="font-label-sm text-label-sm text-on-surface-variant">Tables</div>
+                                </div>
+                                <div className="bg-surface-container-low border border-outline-variant p-4 rounded-2xl flex flex-col items-center justify-center">
+                                    <span className="material-symbols-outlined text-tertiary mb-1">groups</span>
+                                    <div className="font-label-md text-label-md text-on-surface">Community</div>
+                                </div>
+                            </div>
+                            <div className="w-full space-y-4">
+                                <button onClick={() => navigate('/signup')} className="w-full bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md h-14 rounded-xl transition-all active:scale-95 shadow-md flex items-center justify-center gap-2 group">
+                                    Let's Play
+                                    <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                                </button>
+                                <div className="pt-4">
+                                    <button onClick={() => navigate('/signup')} className="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors flex items-center justify-center w-full gap-1">
+                                        Already a member? <span className="text-primary font-bold">Sign In</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div className="mt-10 pt-8 border-t border-outline-variant w-full">
+                                <div className="flex items-center justify-center gap-2 mb-2">
+                                    <div className="flex -space-x-2">
+                                        <img className="w-8 h-8 rounded-full border-2 border-white object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlYo-NA8TW1NFMFDTnxk8FA3aPp3YVmyEfUaDz3Bv_6_grbCWYg5p7fX9Ge51PsHxBhG1bPhlgkGv7RJfsUVbMm8RlZ9IZ0A587KDugd5pDUiwQHyqMu6itGr53U2HXbOqaZDKqG_PJCen-FU6z_VLzE2qDaXT866opjZqDEDtwX_CVEX9SNtrloMt-iFhHM5ncyp4GSUGGDcj91rd2z0hny22l3hTQsrJaZM9kSMvMFvhV3LLPFf6sdHW57DB20NCfaKYQycWJa2Q" />
+                                        <img className="w-8 h-8 rounded-full border-2 border-white object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmJ0HHglub4G2TNm6emROYg1wGkAG8XciB_59qse2vEAB0dz9_3QpRaRlgIUzIDOOPjox2SIgJSgJrc9msEdBcXVbAyV-0H7dZboqOkxQR8JRZiSboSjoGUEpl07xe-OjUFd8ra623XdjLni2UnbDXuGjeiLqWcabaPGY6brls98SvXGbE2RL3dx3pNYNfTd6H6tGebsoW1VZ8bZPfsoSmhUdSe67m5dgM0_SfnZ4W6vFwFX9EH6AnAZLDwBSbbveSRKFeSO4yCMbQ" />
+                                        <img className="w-8 h-8 rounded-full border-2 border-white object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrnK8owqR07yuqxLjx3VaGck7Q96Q53g2W1wiGLP-KdTpJlCPSxcPUi8FF4UGqmrJMQpOTHY-lYOTn9CrdLq_52j3U7btiykczI9YUfkwyG0rJXwHthfKxT1rDob7MRD07ow4FTBecAjEgh0fwmG8dslLuh0xQ2YSIq-oSs0CnzVltI5JeTRkAXTvvnIjKHbegJdBDjFayomGFA2kHl1jELBQ__SLNH4-BbBaTHZ9BmPi1Bhtgm14ozFbdKv73f6woNCeg2JhiFMDZ" />
+                                    </div>
+                                    <span className="font-label-sm text-label-sm text-on-surface-variant">Join 2,400+ players today</span>
+                                </div>
+                            </div>
+                        </section>
+                    </main>
+                </div>
+            );
+        };
+
+        // --- Screen 2: Sign Up ---
+        const SignUpPage = () => {
+            const navigate = useNavigate();
+            const [isLoading, setIsLoading] = useState(false);
+            const [isSuccess, setIsSuccess] = useState(false);
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                setIsLoading(true);
+                setTimeout(() => {
+                    setIsLoading(false);
+                    setIsSuccess(true);
+                    setTimeout(() => navigate('/map'), 1000);
+                }, 1500);
+            };
+
+            return (
+                <main className="min-h-screen flex items-center justify-center relative overflow-hidden bg-surface">
+                    <div className="absolute -top-40 -right-40 w-96 h-96 bg-primary-fixed opacity-20 rounded-full blur-3xl"></div>
+                    <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-secondary-fixed opacity-20 rounded-full blur-3xl"></div>
+                    <div className="z-10 w-full max-w-[480px] px-margin-mobile">
+                        <div className="mb-12 flex flex-col items-center text-center">
+                            <div className="w-12 h-12 bg-primary-container rounded-xl flex items-center justify-center mb-6 shadow-lg shadow-primary-container/20">
+                                <span className="material-symbols-outlined text-on-primary-container" style={{fontVariationSettings: "'FILL' 1"}}>sports_tennis</span>
+                            </div>
+                            <h1 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface tracking-tight mb-2">Join the Community</h1>
+                            <p className="font-body-md text-body-md text-on-surface-variant">Discover your perfect match on the courts of Paris.</p>
+                        </div>
+                        <div className="bg-surface-container-lowest border border-outline-variant p-gutter rounded-xl shadow-sm">
+                            <form onSubmit={handleSubmit} className="space-y-6">
+                                <div className="space-y-2">
+                                    <label className="font-label-md text-label-md text-on-surface-variant ml-1" htmlFor="name">Full Name</label>
+                                    <input className="w-full px-4 py-3 bg-surface border border-outline-variant rounded-lg outline-none focus:ring-2 focus:ring-primary" id="name" placeholder="Enter your full name" required type="text" />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="font-label-md text-label-md text-on-surface-variant ml-1" htmlFor="email">Email Address</label>
+                                    <input className="w-full px-4 py-3 bg-surface border border-outline-variant rounded-lg outline-none focus:ring-2 focus:ring-primary" id="email" placeholder="name@example.com" required type="email" />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="font-label-md text-label-md text-on-surface-variant ml-1" htmlFor="password">Password</label>
+                                    <input className="w-full px-4 py-3 bg-surface border border-outline-variant rounded-lg outline-none focus:ring-2 focus:ring-primary" id="password" placeholder="Create a strong password" required type="password" />
+                                </div>
+                                <button className={`w-full py-4 ${isSuccess ? 'bg-tertiary-container' : 'bg-primary'} text-on-primary font-headline-md text-headline-md rounded-lg shadow-md active:scale-95 transition-all flex items-center justify-center gap-2`} type="submit">
+                                    {isLoading ? <span className="material-symbols-outlined animate-spin">progress_activity</span> : (isSuccess ? 'Account Created!' : 'Create Account')}
+                                </button>
+                            </form>
+                            <div className="relative my-8">
+                                <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-outline-variant"></div></div>
+                                <div className="relative flex justify-center text-label-sm font-label-sm uppercase tracking-widest"><span className="bg-surface-container-lowest px-4 text-on-surface-variant">Or continue with</span></div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <button className="flex items-center justify-center gap-2 py-3 border border-outline-variant rounded-lg hover:bg-surface-container-low transition-colors">
+                                    <img alt="G" className="w-5 h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJ0NpybIjp6Br19Y1qzQx6aDoI32454AGVvueoVYuAeKwdwrYZCYM_LlmNT6HZ3AjsG8iv_ZxZ7LXQxA_xkeK4Oupgdd8tevKmRWRscZHTFUXv67tkMQOhbTHq-m7EP8e2CMzIF-bRTNdjvhLI9ZVpillROGosJF5INPSxahrrcICdooikCfs06NOQZAaSY1QGyuHepT9_ggnazRUL7YxCG5W78YwhSkJKYuppGi8T8J97P2gGA4bgUkJYFXwWvp1CgLPDwuJHOPjB" />
+                                    <span className="font-label-md text-label-md">Google</span>
+                                </button>
+                                <button className="flex items-center justify-center gap-2 py-3 border border-outline-variant rounded-lg hover:bg-surface-container-low transition-colors">
+                                    <span className="material-symbols-outlined text-[#1877F2]" style={{fontVariationSettings: "'FILL' 1"}}>social_leaderboard</span>
+                                    <span className="font-label-md text-label-md">Facebook</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            );
+        };
+
+        const getPingPongTables = () => {
+            const imagePool = [
+                "https://lh3.googleusercontent.com/aida-public/AB6AXuBJZYZbqfoPMrfcDV71VkoSZA1BTGkw25x5n-ntN7A-vkefRThOfck6-B4uXnWGqWMrrZ-HKX6cPL7dfACgwSnZ1FBqNsP0QFbHgRXqBClYYxfTHOyI71OyBkcCLv-CVreDLeCp3--bmZPKOXay9cm1vJ5JWq5UDvMrOhQ9eVMzbj_y5bRIj3EaW0nvrrpLHXEYcTLKp_VbAhC_jPqVBryIhNUtaQUrW0e07RSxKUxzJ2z0e7RWh1hibsiXVjIwHUpIn06hGSAgjGiZ",
+                "https://lh3.googleusercontent.com/aida-public/AB6AXuDz-AdN-Ymlh2S7B_si5lVDeb2jM23ed7oI6WqvGGW-_RsUs3-upZ9ALoeT0JlJNvgGC0EObkj4-KFWJ_nprJsX8hFxPO5ISId4iRwE7e5nunBmRF2t8DYnmjQYvk-uij9YB9JcEQFiLdRJ2RS_z2DGPu2alBxIhmvtSzFCPcGLREuzKDQ4M3YM0WsGHUVMoOMrwlxVeWMNrvbxOi7x6H1Bk5euvGcB_n6s11sRTkJMaMAOGFJftzRyuFvnFvm0BL0xjxq-r-dxelZg",
+                "https://lh3.googleusercontent.com/aida-public/AB6AXuBKW9AaMumfPmzRBY0xm75cP2SQJB9g0_4BKgXpJZRhOcVZkuCrj4TNyZEOj_ZF0PAN6kyEzpVKfrb_XgI_Z-fHa9aVGiD6gxfYVjFH3oEZcjh9ipWFjtp1UhUEMKk8xexMuufZr0pkMXTJwyIisZmRE1cI910HdS8LokiXqTtzsn60iShBTcTTGFDAXsCYkZF3ZXJe57ZiR5gfLbbF3MkMMwwqw-rNZKr_osxHxFJNaBErR4_HtiJXlwgUA384sdIgTF8qvVZQ5THu"
+            ];
+
+            const tables = [
+                { name: "Square Émile-Chautemps", district: "Paris Centre", lat: 48.8669, lng: 2.3534, tables: "2 tables", rating: "4.6" },
+                { name: "Square du Temple", district: "Paris Centre", lat: 48.8647, lng: 2.3616, tables: "2 tables", rating: "4.7" },
+                { name: "Jardin Albert-Schweitzer", district: "Paris Centre", lat: 48.8599, lng: 2.3553, tables: "1 table", rating: "4.5" },
+                { name: "Square Scipion", district: "5th Arrondissement", lat: 48.8386, lng: 2.3526, tables: "1 table", rating: "4.4" },
+                { name: "Jardin Tino-Rossi", district: "5th Arrondissement", lat: 48.8484, lng: 2.3602, tables: "2 tables", rating: "4.8" },
+                { name: "Jardin des Grands-Explorateurs", district: "6th Arrondissement", lat: 48.8424, lng: 2.3363, tables: "1 table", rating: "4.6" },
+                { name: "Square Pierre-de-Gaulle", district: "7th Arrondissement", lat: 48.8567, lng: 2.3182, tables: "1 table", rating: "4.5" },
+                { name: "Square Marcel-Pagnol", district: "8th Arrondissement", lat: 48.8770, lng: 2.3197, tables: "1 table", rating: "4.3" },
+                { name: "Square Montholon", district: "9th Arrondissement", lat: 48.8774, lng: 2.3458, tables: "2 tables", rating: "4.6" },
+                { name: "Square Eugène-Varlin", district: "10th Arrondissement", lat: 48.8772, lng: 2.3636, tables: "1 table", rating: "4.5" },
+                { name: "Square des Récollets", district: "10th Arrondissement", lat: 48.8746, lng: 2.3620, tables: "1 table", rating: "4.4" },
+                { name: "Square Maurice-Gardette", district: "11th Arrondissement", lat: 48.8616, lng: 2.3798, tables: "2 tables", rating: "4.7" },
+                { name: "Square Trousseau", district: "12th Arrondissement", lat: 48.8490, lng: 2.3788, tables: "1 table", rating: "4.6" },
+                { name: "Parc Floral de Paris", district: "12th Arrondissement", lat: 48.8386, lng: 2.4446, tables: "2 tables", rating: "4.9" },
+                { name: "Parc de Choisy", district: "13th Arrondissement", lat: 48.8286, lng: 2.3608, tables: "2 tables", rating: "4.7" },
+                { name: "Parc Kellermann", district: "13th Arrondissement", lat: 48.8194, lng: 2.3565, tables: "2 tables", rating: "4.6" },
+                { name: "Square du Serment-de-Koufra", district: "14th Arrondissement", lat: 48.8211, lng: 2.3259, tables: "1 table", rating: "4.4" },
+                { name: "Parc André-Citroën", district: "15th Arrondissement", lat: 48.8414, lng: 2.2730, tables: "2 tables", rating: "4.8" },
+                { name: "Parc Georges-Brassens", district: "15th Arrondissement", lat: 48.8315, lng: 2.3004, tables: "2 tables", rating: "4.7" },
+                { name: "Jardin du Ranelagh", district: "16th Arrondissement", lat: 48.8581, lng: 2.2680, tables: "1 table", rating: "4.5" },
+                { name: "Square des Batignolles", district: "17th Arrondissement", lat: 48.8873, lng: 2.3156, tables: "1 table", rating: "4.6" },
+                { name: "Square Carpeaux", district: "18th Arrondissement", lat: 48.8923, lng: 2.3336, tables: "1 table", rating: "4.4" },
+                { name: "Square de la Madone", district: "18th Arrondissement", lat: 48.8948, lng: 2.3601, tables: "1 table", rating: "4.4" },
+                { name: "Square de la Butte-du-Chapeau-Rouge", district: "19th Arrondissement", lat: 48.8816, lng: 2.3980, tables: "2 tables", rating: "4.8" },
+                { name: "Square du Quai-de-la-Loire", district: "19th Arrondissement", lat: 48.8844, lng: 2.3726, tables: "1 table", rating: "4.5" },
+                { name: "Square Édouard-Vaillant", district: "20th Arrondissement", lat: 48.8647, lng: 2.3994, tables: "1 table", rating: "4.5" },
+                { name: "Square Séverine", district: "20th Arrondissement", lat: 48.8714, lng: 2.4113, tables: "1 table", rating: "4.4" }
+            ].map((table, index) => ({
+                ...table,
+                image: imagePool[index % imagePool.length]
+            }));
+
+
+            return tables;
+        };
+
+        // --- Screen 3: Map Explorer ---
+        const MapPage = () => {
+            const navigate = useNavigate();
+
+            const tables = getPingPongTables();
+            const [searchQuery, setSearchQuery] = useState("");
+            const [userLocation, setUserLocation] = useState(null);
+
+            const getDistanceKm = (lat1, lng1, lat2, lng2) => {
+                const earthRadius = 6371;
+                const dLat = (lat2 - lat1) * Math.PI / 180;
+                const dLng = (lng2 - lng1) * Math.PI / 180;
+                const a =
+                    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                    Math.sin(dLng / 2) * Math.sin(dLng / 2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                return earthRadius * c;
+            };
+
+            const normalizedQuery = searchQuery.trim().toLowerCase();
+            const filteredTables = (normalizedQuery
+                ? tables.filter((table) =>
+                    table.name.toLowerCase().includes(normalizedQuery) ||
+                    table.district.toLowerCase().includes(normalizedQuery) ||
+                    table.tables.toLowerCase().includes(normalizedQuery)
+                  )
+                : tables
+            ).sort((a, b) => {
+                if (!userLocation) return 0;
+                const distanceA = getDistanceKm(userLocation.lat, userLocation.lng, a.lat, a.lng);
+                const distanceB = getDistanceKm(userLocation.lat, userLocation.lng, b.lat, b.lng);
+                return distanceA - distanceB;
+            });
+
+            const focusFirstResult = () => {
+                if (!filteredTables.length) return;
+                const index = tables.findIndex((table) => table.name === filteredTables[0].name);
+                if (index >= 0 && window.focusTable) window.focusTable(index);
+            };
+
+            useEffect(() => {
+                if (document.getElementById("map")._leaflet_id) return;
+
+                const map = L.map("map", {
+                    zoomControl: false
+                }).setView([48.8566, 2.3522], 12);
+
+                L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                    attribution: "© OpenStreetMap"
+                }).addTo(map);
+
+                const pingIcon = L.divIcon({
+                    className: "",
+                    html: `
+                        <div style="
+                            background:#ba0036;
+                            color:white;
+                            width:38px;
+                            height:38px;
+                            border-radius:9999px;
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                            font-weight:800;
+                            box-shadow:0 8px 20px rgba(0,0,0,0.25);
+                            border:3px solid white;
+                        ">🏓</div>
+                    `,
+                    iconSize: [38, 38],
+                    iconAnchor: [19, 38],
+                    popupAnchor: [0, -38]
+                });
+
+                const markers = [];
+
+                tables.forEach((table, index) => {
+                    const marker = L.marker([table.lat, table.lng], { icon: pingIcon })
+                        .addTo(map)
+                        .bindPopup(`
+                            <strong>${table.name}</strong><br />
+                            ${table.district}<br />
+                            ${table.tables} · Free access
+                        `)
+                        .on("click", () => navigate(`/detail/${index}`));
+
+                    markers[index] = marker;
+                });
+
+                window.focusTable = (index) => {
+                    const table = tables[index];
+                    const marker = markers[index];
+                    if (!table || !marker) return;
+                    map.setView([table.lat, table.lng], 15, { animate: true });
+                    marker.openPopup();
+                };
+
+                let userMarker = null;
+                let userCircle = null;
+
+                window.locateUser = () => {
+                    if (!navigator.geolocation) {
+                        alert("La géolocalisation n'est pas disponible sur ce navigateur.");
+                        return;
+                    }
+
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const { latitude, longitude, accuracy } = position.coords;
+                            setUserLocation({ lat: latitude, lng: longitude });
+
+                            map.setView([latitude, longitude], 15, { animate: true });
+
+                            if (userMarker) map.removeLayer(userMarker);
+                            if (userCircle) map.removeLayer(userCircle);
+
+                            userCircle = L.circle([latitude, longitude], {
+                                radius: accuracy || 80,
+                                color: "#0054cc",
+                                fillColor: "#0054cc",
+                                fillOpacity: 0.12,
+                                weight: 2
+                            }).addTo(map);
+
+                            userMarker = L.circleMarker([latitude, longitude], {
+                                radius: 9,
+                                color: "#ffffff",
+                                weight: 3,
+                                fillColor: "#0054cc",
+                                fillOpacity: 1
+                            }).addTo(map).bindPopup("📍 Vous êtes ici").openPopup();
+                        },
+                        () => {
+                            alert("Impossible d'accéder à votre position. Autorisez la localisation dans votre navigateur.");
+                        },
+                        {
+                            enableHighAccuracy: true,
+                            timeout: 10000,
+                            maximumAge: 60000
+                        }
+                    );
+                };
+            }, [navigate]);
+
+            return (
+                <div className="h-screen flex flex-col bg-surface overflow-hidden">
+                    <TopAppBar />
+                    <main className="relative flex-1 w-full overflow-hidden bg-surface-container-lowest">
+                        <div id="map" className="absolute inset-0 z-0"></div>
+                        <div className="absolute inset-0 map-gradient pointer-events-none z-10"></div>
+
+                        <div className="absolute top-6 left-1/2 -translate-x-1/2 w-[calc(100%-40px)] max-w-lg z-30">
+                            <div className="flex items-center bg-surface-container-lowest border border-outline-variant rounded-full px-4 py-3 shadow-lg hover:shadow-xl transition-shadow">
+                                <span className="material-symbols-outlined text-on-surface-variant mr-3">search</span>
+                                <input
+                                    value={searchQuery}
+                                    onChange={(event) => setSearchQuery(event.target.value)}
+                                    onKeyDown={(event) => {
+                                        if (event.key === 'Enter') focusFirstResult();
+                                    }}
+                                    className="flex-1 bg-transparent border-0 p-0 text-on-surface font-body-md placeholder:text-on-surface-variant focus:ring-0 focus:outline-none"
+                                    placeholder="Search tables or districts..."
+                                />
+                                {searchQuery && (
+                                    <button onClick={() => setSearchQuery("")} className="material-symbols-outlined text-on-surface-variant mr-2">close</button>
+                                )}
+                                <div className="w-px h-6 bg-outline-variant mx-3"></div>
+                                <button onClick={focusFirstResult} className="material-symbols-outlined text-primary">tune</button>
+                            </div>
+                        </div>
+
+                        <div className="absolute top-40 right-4 z-40">
+                            <button onClick={() => window.locateUser && window.locateUser()} title="Utiliser ma position" className="flex items-center justify-center w-12 h-12 bg-surface-container-lowest rounded-full shadow-lg border border-outline-variant text-primary active:scale-90 transition-all hover:bg-primary-fixed">
+                                <span className="material-symbols-outlined">my_location</span>
+                            </button>
+                        </div>
+
+                        {/* Cards for every table */}
+                        <div className="absolute bottom-24 left-0 w-full z-40">
+                            <div className="px-margin-mobile flex justify-between items-end mb-4">
+                                <h2 className="font-headline-md text-headline-md text-on-surface bg-surface-container-lowest/85 backdrop-blur px-4 py-1 rounded-lg">
+                                    {userLocation ? "Tables proches" : "Tables à Paris"}
+                                </h2>
+                                <button className="text-label-md font-bold text-primary bg-surface-container-lowest/85 backdrop-blur px-4 py-1 rounded-full hover:underline">
+                                    {filteredTables.length} / {tables.length} spots
+                                </button>
+                            </div>
+
+                            <div className="flex overflow-x-auto gap-4 px-margin-mobile no-scrollbar snap-x snap-mandatory pb-2">
+                                {filteredTables.map((table) => {
+                                    const index = tables.findIndex((item) => item.name === table.name);
+                                    return (
+                                    <article
+                                        key={table.name}
+                                        onClick={() => window.focusTable && window.focusTable(index)}
+                                        className="min-w-[280px] md:min-w-[340px] snap-center bg-surface-container-lowest rounded-xl border border-outline-variant shadow-lg hover:shadow-xl cursor-pointer overflow-hidden flex flex-col group active:scale-[0.98] transition-all"
+                                    >
+                                        <div className="h-40 overflow-hidden relative">
+                                            <img
+                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                                src={table.image}
+                                                alt={table.name}
+                                            />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                                            <div className="absolute top-2 right-2 bg-surface-container-lowest/90 backdrop-blur p-2 rounded-full">
+                                                <span className="material-symbols-outlined text-primary text-lg" style={{fontVariationSettings: "'FILL' 1"}}>favorite</span>
+                                            </div>
+                                            <div className="absolute bottom-3 left-3 flex gap-2">
+                                                <span className="bg-primary text-on-primary px-3 py-1 rounded-full text-label-sm font-bold">Free</span>
+                                                <span className="bg-white/90 text-on-surface px-3 py-1 rounded-full text-label-sm font-bold">{table.tables}</span>
+                                            </div>
+                                        </div>
+                                        <div className="p-4">
+                                            <div className="flex justify-between gap-3 mb-1">
+                                                <h3 className="font-label-md text-label-md leading-tight">{table.name}</h3>
+                                                <div className="flex items-center gap-1 shrink-0">
+                                                    <span className="material-symbols-outlined text-sm text-primary" style={{fontVariationSettings: "'FILL' 1"}}>star</span>
+                                                    <span className="text-label-sm font-bold">{table.rating}</span>
+                                                </div>
+                                            </div>
+                                            <p className="text-on-surface-variant text-label-sm mb-1">{table.district}</p>
+                                            {userLocation && (
+                                                <p className="text-primary text-label-sm font-bold mb-3">
+                                                    {getDistanceKm(userLocation.lat, userLocation.lng, table.lat, table.lng).toFixed(1)} km de vous
+                                                </p>
+                                            )}
+                                            {!userLocation && <div className="mb-3"></div>}
+                                            <div className="flex items-center justify-between">
+                                                <button className="text-label-sm font-bold text-primary flex items-center gap-1">
+                                                    Voir sur la carte
+                                                    <span className="material-symbols-outlined text-sm">map</span>
+                                                </button>
+                                                <button
+                                                    onClick={(event) => {
+                                                        event.stopPropagation();
+                                                        navigate(`/detail/${index}`);
+                                                    }}
+                                                    className="text-label-sm font-bold text-on-surface-variant hover:text-primary flex items-center gap-1"
+                                                >
+                                                    Détail
+                                                    <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </article>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </main>
+                    <BottomNavBar />
+                </div>
+            );
+        };
+
+        // --- Screen 4: Detail View ---
+        const DetailPage = () => {
+            const navigate = useNavigate();
+            const { spotId } = useParams();
+            const [favorite, setFavorite] = useState(false);
+            const tables = getPingPongTables();
+            const selectedIndex = Number.isInteger(parseInt(spotId)) ? parseInt(spotId) : 0;
+            const table = tables[selectedIndex] || tables[0];
+            const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${table.lat},${table.lng}`;
+
+            return (
+                <div className="bg-surface min-h-screen">
+                    <nav className="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-6 pt-6 pointer-events-none">
+                        <button onClick={() => navigate(-1)} className="pointer-events-auto h-10 w-10 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm text-on-surface shadow-sm active:scale-95 transition-transform">
+                            <span className="material-symbols-outlined">arrow_back</span>
+                        </button>
+                        <div className="flex gap-2">
+                            <button className="pointer-events-auto h-10 w-10 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm text-on-surface shadow-sm active:scale-95">
+                                <span className="material-symbols-outlined">share</span>
+                            </button>
+                            <button onClick={() => setFavorite(!favorite)} className="pointer-events-auto h-10 w-10 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm shadow-sm active:scale-95">
+                                <span className="material-symbols-outlined" style={{fontVariationSettings: favorite ? "'FILL' 1" : "", color: favorite ? '#ba0036' : ''}}>favorite</span>
+                            </button>
+                        </div>
+                    </nav>
+
+                    <header className="relative w-full aspect-[4/3] md:aspect-[21/9] overflow-hidden bg-surface-container">
+                        <img className="w-full h-full object-cover" src={table.image} alt={table.name} />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                        <div className="absolute bottom-6 left-6 right-6 text-white">
+                            <span className="inline-flex items-center gap-2 bg-primary text-on-primary px-3 py-1 rounded-full font-label-sm mb-3">
+                                <span className="material-symbols-outlined text-sm">sports_tennis</span>
+                                Free access
+                            </span>
+                            <h1 className="font-headline-lg-mobile md:font-headline-lg text-white mb-1">{table.name}</h1>
+                            <p className="font-body-md text-white/85">{table.district}</p>
+                        </div>
+                    </header>
+
+                    <main className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-8 pb-32">
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+                            <section className="lg:col-span-8">
+                                <div className="mb-8">
+                                    <div className="flex flex-wrap items-center gap-2 mb-5">
+                                        <span className="px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed rounded-full font-label-sm flex items-center gap-1">
+                                            <span className="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>Available
+                                        </span>
+                                        <span className="px-3 py-1 bg-surface-container-high text-on-surface-variant rounded-full font-label-sm">Outdoor</span>
+                                        <span className="px-3 py-1 bg-primary-fixed text-on-primary-fixed rounded-full font-label-sm">{table.rating} ★</span>
+                                    </div>
+                                    <h2 className="font-headline-lg-mobile md:font-headline-lg text-on-surface mb-2">{table.name}</h2>
+                                    <div className="flex items-center gap-1 text-on-surface-variant">
+                                        <span className="material-symbols-outlined text-[18px]">location_on</span>
+                                        <p className="font-body-md">{table.district}, Paris</p>
+                                    </div>
+                                </div>
+
+                                <hr className="border-outline-variant my-8" />
+
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+                                    {[
+                                        {icon: 'sports_tennis', title: table.tables, sub: 'Table extérieure'},
+                                        {icon: 'payments', title: 'Free access', sub: 'Libre-service'},
+                                        {icon: 'place', title: table.district, sub: 'Paris'},
+                                        {icon: 'backpack', title: 'BYO Rackets', sub: 'Bring gear'}
+                                    ].map((feat, i) => (
+                                        <div key={i} className="flex flex-col gap-2 p-4 border border-outline-variant rounded-xl hover:border-on-surface transition-colors">
+                                            <span className="material-symbols-outlined text-primary text-[28px]">{feat.icon}</span>
+                                            <div>
+                                                <p className="font-label-md">{feat.title}</p>
+                                                <p className="font-body-sm text-on-surface-variant">{feat.sub}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <article className="mb-12">
+                                    <h2 className="font-headline-md text-headline-md mb-4">About this spot</h2>
+                                    <p className="font-body-lg text-on-surface-variant leading-relaxed">
+                                        {table.name} is an outdoor ping-pong spot in {table.district}. It is listed as a free public place to play table tennis in Paris. Bring your own rackets and balls, check the weather, and use the map button to get directions.
+                                    </p>
+                                </article>
+                            </section>
+
+                            <aside className="hidden lg:block lg:col-span-4 h-fit sticky top-24">
+                                <div className="p-6 border border-outline-variant rounded-2xl bg-white shadow-lg">
+                                    <h3 className="font-headline-md mb-6">Plan your visit</h3>
+                                    <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="w-full bg-primary text-on-primary h-14 rounded-lg font-label-md flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-transform">
+                                        <span className="material-symbols-outlined">directions_run</span>Go there
+                                    </a>
+                                    <button onClick={() => navigate('/map')} className="w-full mt-3 border border-outline-variant text-on-surface h-12 rounded-lg font-label-md flex items-center justify-center gap-2 active:scale-95 transition-transform">
+                                        <span className="material-symbols-outlined">map</span>Back to map
+                                    </button>
+                                </div>
+                            </aside>
+                        </div>
+                    </main>
+
+                    <div className="fixed bottom-0 left-0 w-full lg:hidden bg-white/95 backdrop-blur-md border-t border-outline-variant px-margin-mobile py-4 z-50 flex items-center justify-between gap-4">
+                        <div className="min-w-0">
+                            <p className="font-label-md truncate">{table.name}</p>
+                            <p className="font-body-sm text-on-surface-variant">{table.tables} · Free access</p>
+                        </div>
+                        <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="bg-primary text-on-primary px-6 py-3 rounded-lg font-label-md shadow-md shrink-0">Go there</a>
+                    </div>
+                </div>
+            );
+        };
+
+        // --- Screen 5: Explore List ---
+        const ExplorePage = () => {
+            const navigate = useNavigate();
+            const tables = getPingPongTables();
+            const [searchQuery, setSearchQuery] = useState("");
+            const [userLocation, setUserLocation] = useState(null);
+
+            const getDistanceKm = (lat1, lng1, lat2, lng2) => {
+                const earthRadius = 6371;
+                const dLat = (lat2 - lat1) * Math.PI / 180;
+                const dLng = (lng2 - lng1) * Math.PI / 180;
+                const a =
+                    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                    Math.sin(dLng / 2) * Math.sin(dLng / 2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                return earthRadius * c;
+            };
+
+            const normalizedQuery = searchQuery.trim().toLowerCase();
+            const filteredTables = (normalizedQuery
+                ? tables.filter((table) =>
+                    table.name.toLowerCase().includes(normalizedQuery) ||
+                    table.district.toLowerCase().includes(normalizedQuery) ||
+                    table.tables.toLowerCase().includes(normalizedQuery)
+                  )
+                : tables
+            ).sort((a, b) => {
+                if (!userLocation) return 0;
+                const distanceA = getDistanceKm(userLocation.lat, userLocation.lng, a.lat, a.lng);
+                const distanceB = getDistanceKm(userLocation.lat, userLocation.lng, b.lat, b.lng);
+                return distanceA - distanceB;
+            });
+
+            return (
+                <div className="bg-surface min-h-screen">
+                    <TopAppBar />
+                    <main className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop pt-8 pb-32">
+                        <div className="mb-8">
+                            <span className="font-label-sm text-label-sm text-primary uppercase tracking-widest">Explore</span>
+                            <h1 className="font-headline-lg-mobile md:font-headline-lg text-on-surface mt-2 mb-3">Toutes les tables</h1>
+                            <p className="font-body-md text-on-surface-variant">Recherche par nom, arrondissement ou nombre de tables.</p>
+                        </div>
+
+                        <div className="sticky top-20 z-30 mb-6 bg-surface/90 backdrop-blur py-3">
+                            <div className="flex items-center bg-surface-container-lowest border border-outline-variant rounded-full px-4 py-3 shadow-sm">
+                                <span className="material-symbols-outlined text-on-surface-variant mr-3">search</span>
+                                <input
+                                    value={searchQuery}
+                                    onChange={(event) => setSearchQuery(event.target.value)}
+                                    className="flex-1 bg-transparent border-0 p-0 text-on-surface font-body-md placeholder:text-on-surface-variant focus:ring-0 focus:outline-none"
+                                    placeholder="Ex: 15th, Temple, Parc..."
+                                />
+                                {searchQuery && (
+                                    <button onClick={() => setSearchQuery("")} className="material-symbols-outlined text-on-surface-variant">close</button>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="flex items-center justify-between mb-4">
+                            <p className="font-label-md text-on-surface-variant">{filteredTables.length} résultat(s)</p>
+                            <Link to="/map" className="font-label-md text-primary flex items-center gap-1">
+                                Voir la carte
+                                <span className="material-symbols-outlined text-sm">map</span>
+                            </Link>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter">
+                            {filteredTables.map((table) => {
+                                const index = tables.findIndex((item) => item.name === table.name);
+                                return (
+                                    <article key={table.name} className="bg-surface-container-lowest rounded-2xl border border-outline-variant shadow-sm overflow-hidden group">
+                                        <div className="h-44 overflow-hidden relative">
+                                            <img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src={table.image} alt={table.name} />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                                            <div className="absolute bottom-3 left-3 flex gap-2">
+                                                <span className="bg-primary text-on-primary px-3 py-1 rounded-full text-label-sm font-bold">Free</span>
+                                                <span className="bg-white/90 text-on-surface px-3 py-1 rounded-full text-label-sm font-bold">{table.tables}</span>
+                                            </div>
+                                        </div>
+                                        <div className="p-4">
+                                            <div className="flex justify-between gap-3 mb-1">
+                                                <h2 className="font-label-md text-label-md leading-tight">{table.name}</h2>
+                                                <div className="flex items-center gap-1 shrink-0">
+                                                    <span className="material-symbols-outlined text-sm text-primary" style={{fontVariationSettings: "'FILL' 1"}}>star</span>
+                                                    <span className="text-label-sm font-bold">{table.rating}</span>
+                                                </div>
+                                            </div>
+                                            <p className="text-on-surface-variant text-label-sm mb-4">{table.district}</p>
+                                            <div className="flex gap-3">
+                                                <button onClick={() => navigate(`/detail/${index}`)} className="flex-1 bg-primary text-on-primary h-11 rounded-lg font-label-md active:scale-95 transition-transform">Détail</button>
+                                                <button onClick={() => navigate('/map')} className="flex-1 border border-outline-variant text-on-surface h-11 rounded-lg font-label-md active:scale-95 transition-transform">Map</button>
+                                            </div>
+                                        </div>
+                                    </article>
+                                );
+                            })}
+                        </div>
+
+                        {filteredTables.length === 0 && (
+                            <div className="text-center py-16 text-on-surface-variant">
+                                <span className="material-symbols-outlined text-4xl mb-3">search_off</span>
+                                <p>Aucune table trouvée.</p>
+                            </div>
+                        )}
+                    </main>
+                    <BottomNavBar />
+                </div>
+            );
+        };
+
+        // --- Screen 5: Profile ---
+        const ProfilePage = () => {
+            const [activeTab, setActiveTab] = useState('favorites');
+            return (
+                <div className="bg-surface min-h-screen">
+                    <TopAppBar />
+                    <main className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop pt-8 pb-32">
+                        <div className="flex flex-col md:flex-row items-center md:items-start gap-8 mb-12">
+                            <div className="relative">
+                                <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-surface shadow-lg ring-2 ring-primary">
+                                    <img alt="Julien" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2tMauUeI7Qw5JDs74AWhjdzFeDtuDo98rmW17540pNpOB0kiwKCPx927mWoZK6zPx3Ewtx8AE1swJ1p7AKT2oR3AuAUnNYnLT7d2VlR73Y3vStbNDVMbMiF-qkgMpxMTQhQPzP_JywNBYiIR2VLeNT7fXrGPAzczK27grhBcLdk2Plcicj9a-BFHPXQl0BuyiJw4iSh6nTv4u3tz4kUnJafxYKinfFtuFjvXCDTEBlx0_zfLpeKWl1pv16MZkFPXL4HJsyWghW6SN" />
+                                </div>
+                                <div className="absolute bottom-1 right-1 bg-primary text-white p-1.5 rounded-full border-2 border-surface flex items-center justify-center">
+                                    <span className="material-symbols-outlined text-sm" style={{fontVariationSettings: "'FILL' 1"}}>verified</span>
+                                </div>
+                            </div>
+                            <div className="flex-1 text-center md:text-left">
+                                <div className="flex flex-col md:flex-row md:items-baseline md:gap-4 mb-2">
+                                    <h1 className="font-headline-lg text-headline-lg-mobile md:text-headline-lg">Julien Lefebvre</h1>
+                                    <span className="font-label-md text-on-surface-variant bg-surface-container px-3 py-1 rounded-full w-fit mx-auto md:mx-0">Pro Explorer</span>
+                                </div>
+                                <p className="font-body-lg text-on-surface-variant max-w-lg mb-6">Passionate ping-pong explorer. On a mission to find the best stone tables hidden in Paris's arrondissements.</p>
+                                <div className="flex justify-center md:justify-start gap-8">
+                                    <div className="text-center md:text-left"><div className="font-headline-md text-primary">15</div><div className="text-label-sm uppercase">Spots</div></div>
+                                    <div className="text-center md:text-left"><div className="font-headline-md text-primary">28</div><div className="text-label-sm uppercase">Games</div></div>
+                                    <div className="text-center md:text-left"><div className="font-headline-md text-primary">9.8</div><div className="text-label-sm uppercase">Rep</div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="border-b border-outline-variant mb-8 flex gap-8 overflow-x-auto no-scrollbar">
+                            {['Favorites', 'My Photos', 'History'].map(tab => (
+                                <button 
+                                    key={tab} 
+                                    onClick={() => setActiveTab(tab.toLowerCase().replace(' ', ''))}
+                                    className={`pb-4 font-label-md whitespace-nowrap border-b-2 transition-colors ${activeTab === tab.toLowerCase().replace(' ', '') ? 'text-primary border-primary' : 'text-on-surface-variant border-transparent'}`}
+                                >
+                                    {tab}
+                                </button>
+                            ))}
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-gutter">
+                            <div className="group cursor-pointer">
+                                <div className="relative aspect-square rounded-xl overflow-hidden mb-3 border border-outline-variant">
+                                    <img className="w-full h-full object-cover transition-transform group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJZYZbqfoPMrfcDV71VkoSZA1BTGkw25x5n-ntN7A-vkefRThOfck6-B4uXnWGqWMrrZ-HKX6cPL7dfACgwSnZ1FBqNsP0QFbHgRXqBClYYxfTHOyI71OyBkcCLv-CVreDLeCp3--bmZPKOXay9cm1vJ5JWq5UDvMrOhQ9eVMzbj_y5bRIj3EaW0nvrrpLHXEYcTLKp_VbAhC_jPqVBryIhNUtaQUrW0e07RSxKUxzJ2z0e7RWh1hibsiXVjIwHUpIn06hGSAgjGiZ" />
+                                    <div className="absolute top-3 right-3"><span className="material-symbols-outlined text-primary" style={{fontVariationSettings: "'FILL' 1"}}>favorite</span></div>
+                                    <div className="absolute bottom-3 left-3 bg-white/90 px-2 py-1 rounded text-[10px] font-bold">6th Arr.</div>
+                                </div>
+                                <div className="flex justify-between items-start">
+                                    <h3 className="font-label-md">Jardin du Luxembourg</h3>
+                                    <div className="flex items-center gap-1"><span className="material-symbols-outlined text-xs text-primary" style={{fontVariationSettings: "'FILL' 1"}}>star</span><span className="font-label-sm">4.9</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                    <BottomNavBar />
+                </div>
+            );
+        };
+
+        // --- Main App Component ---
+        const App = () => {
+            return (
+                <MemoryRouter>
+                    <Routes>
+                        <Route path="/" element={<OnboardingPage />} />
+                        <Route path="/signup" element={<SignUpPage />} />
+                        <Route path="/map" element={<MapPage />} />
+                        <Route path="/explore" element={<ExplorePage />} />
+                        <Route path="/detail/:spotId" element={<DetailPage />} />
+                        <Route path="/profile" element={<ProfilePage />} />
+                    </Routes>
+                </MemoryRouter>
+            );
+        };
+
+        const container = document.getElementById('root');
+        const root = createRoot(container);
+        root.render(<App />);
+    </script>
+</body>
+</html>
