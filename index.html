@@ -490,6 +490,8 @@
             const tables = getPingPongTables();
             const weather = useParisWeather();
             const [searchQuery, setSearchQuery] = useState("");
+            const [selectedSpotIndex, setSelectedSpotIndex] = useState(null);
+            window.setSelectedSpotIndex = setSelectedSpotIndex;
             const normalizedQuery = searchQuery.trim().toLowerCase();
             const filteredTables = normalizedQuery
                 ? tables.filter((table) =>
@@ -502,7 +504,10 @@
             const focusFirstResult = () => {
                 if (!filteredTables.length) return;
                 const index = tables.findIndex((table) => table.name === filteredTables[0].name);
-                if (index >= 0 && window.focusTable) window.focusTable(index);
+                if (index >= 0) {
+                    setSelectedSpotIndex(index);
+                    if (window.focusTable) window.focusTable(index);
+                }
             };
 
             useEffect(() => {
@@ -549,7 +554,10 @@
                             ${table.tables} · Free access<br />
                             Weather: Paris live API
                         `)
-                        .on("click", () => navigate(`/detail/${index}`));
+                        .on("click", () => {
+                            if (window.setSelectedSpotIndex) window.setSelectedSpotIndex(index);
+                            map.setView([table.lat, table.lng], 15, { animate: true });
+                        });
 
                     markers[index] = marker;
                 });
@@ -576,6 +584,8 @@
                     });
                 };
             }, [navigate]);
+
+            const selectedTable = selectedSpotIndex !== null ? tables[selectedSpotIndex] : null;
 
             return (
                 <div className="h-screen flex flex-col bg-surface overflow-hidden">
@@ -613,78 +623,75 @@
                             </button>
                         </div>
 
-                        {/* Cards for every table */}
-                        <div className="absolute bottom-24 left-0 w-full z-40">
-                            <div className="px-margin-mobile flex justify-between items-end mb-4">
-                                <h2 className="font-headline-md text-headline-md text-on-surface bg-surface-container-lowest/85 backdrop-blur px-4 py-1 rounded-lg">
-                                    Tables à Paris
-                                </h2>
-                                <button className="text-label-md font-bold text-primary bg-surface-container-lowest/85 backdrop-blur px-4 py-1 rounded-full hover:underline">
-                                    {filteredTables.length} / {tables.length} spots
-                                </button>
+                        {/* Selected table card: appears only after clicking a pin or a search result */}
+                        {selectedTable && (
+                            <div className="absolute bottom-24 left-0 w-full z-40 px-margin-mobile">
+                                <article
+                                    onClick={() => window.focusTable && window.focusTable(selectedSpotIndex)}
+                                    className="max-w-[420px] mx-auto bg-surface-container-lowest rounded-2xl border border-outline-variant shadow-2xl cursor-pointer overflow-hidden flex flex-col group active:scale-[0.98] transition-all"
+                                >
+                                    <div className="h-44 overflow-hidden relative">
+                                        <img
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                            src={selectedTable.image}
+                                            alt={selectedTable.name}
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent"></div>
+                                        <button
+                                            onClick={(event) => {
+                                                event.stopPropagation();
+                                                setSelectedSpotIndex(null);
+                                            }}
+                                            className="absolute top-3 right-3 bg-white/95 text-on-surface w-9 h-9 rounded-full shadow flex items-center justify-center"
+                                        >
+                                            <span className="material-symbols-outlined text-lg">close</span>
+                                        </button>
+                                        <div className="absolute top-3 left-3">
+                                            <WeatherMini weather={weather} />
+                                        </div>
+                                        <div className="absolute bottom-3 left-3 flex gap-2">
+                                            <span className="bg-primary text-on-primary px-3 py-1 rounded-full text-label-sm font-bold">Free</span>
+                                            <span className="bg-white/90 text-on-surface px-3 py-1 rounded-full text-label-sm font-bold">{selectedTable.tables}</span>
+                                        </div>
+                                    </div>
+                                    <div className="p-4">
+                                        <div className="flex justify-between gap-3 mb-1">
+                                            <h3 className="font-label-md text-label-md leading-tight">{selectedTable.name}</h3>
+                                            <div className="flex items-center gap-1 shrink-0">
+                                                <span className="material-symbols-outlined text-sm text-primary" style={{fontVariationSettings: "'FILL' 1"}}>star</span>
+                                                <span className="text-label-sm font-bold">{selectedTable.rating}</span>
+                                            </div>
+                                        </div>
+                                        <p className="text-on-surface-variant text-label-sm mb-1">{selectedTable.district}</p>
+                                        <p className="text-on-surface-variant text-label-sm mb-3">
+                                            {weather ? `${getWeatherIcon(weather.code)} ${weather.temp}° · Vent ${weather.wind} km/h` : "Météo en chargement..."}
+                                        </p>
+                                        <div className="flex items-center justify-between">
+                                            <button className="text-label-sm font-bold text-primary flex items-center gap-1">
+                                                Spot sélectionné
+                                                <span className="material-symbols-outlined text-sm">location_on</span>
+                                            </button>
+                                            <button
+                                                onClick={(event) => {
+                                                    event.stopPropagation();
+                                                    navigate(`/detail/${selectedSpotIndex}`);
+                                                }}
+                                                className="text-label-sm font-bold text-on-surface-variant hover:text-primary flex items-center gap-1"
+                                            >
+                                                Détail
+                                                <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </article>
                             </div>
+                        )}
 
-                            <div className="flex overflow-x-auto gap-4 px-margin-mobile no-scrollbar snap-x snap-mandatory pb-2">
-                                {filteredTables.map((table) => {
-                                    const index = tables.findIndex((item) => item.name === table.name);
-                                    return (
-                                    <article
-                                        key={table.name}
-                                        onClick={() => window.focusTable && window.focusTable(index)}
-                                        className="min-w-[280px] md:min-w-[340px] snap-center bg-surface-container-lowest rounded-xl border border-outline-variant shadow-lg hover:shadow-xl cursor-pointer overflow-hidden flex flex-col group active:scale-[0.98] transition-all"
-                                    >
-                                        <div className="h-40 overflow-hidden relative">
-                                            <img
-                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                                src={table.image}
-                                                alt={table.name}
-                                            />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                                            <div className="absolute top-2 left-2">
-                                                <WeatherMini weather={weather} />
-                                            </div>
-                                            <div className="absolute top-2 right-2 bg-surface-container-lowest/90 backdrop-blur p-2 rounded-full">
-                                                <span className="material-symbols-outlined text-primary text-lg" style={{fontVariationSettings: "'FILL' 1"}}>favorite</span>
-                                            </div>
-                                            <div className="absolute bottom-3 left-3 flex gap-2">
-                                                <span className="bg-primary text-on-primary px-3 py-1 rounded-full text-label-sm font-bold">Free</span>
-                                                <span className="bg-white/90 text-on-surface px-3 py-1 rounded-full text-label-sm font-bold">{table.tables}</span>
-                                            </div>
-                                        </div>
-                                        <div className="p-4">
-                                            <div className="flex justify-between gap-3 mb-1">
-                                                <h3 className="font-label-md text-label-md leading-tight">{table.name}</h3>
-                                                <div className="flex items-center gap-1 shrink-0">
-                                                    <span className="material-symbols-outlined text-sm text-primary" style={{fontVariationSettings: "'FILL' 1"}}>star</span>
-                                                    <span className="text-label-sm font-bold">{table.rating}</span>
-                                                </div>
-                                            </div>
-                                            <p className="text-on-surface-variant text-label-sm mb-1">{table.district}</p>
-                                            <p className="text-on-surface-variant text-label-sm mb-3">
-                                                {weather ? `${getWeatherIcon(weather.code)} ${weather.temp}° · Vent ${weather.wind} km/h` : "Météo en chargement..."}
-                                            </p>
-                                            <div className="flex items-center justify-between">
-                                                <button className="text-label-sm font-bold text-primary flex items-center gap-1">
-                                                    Voir sur la carte
-                                                    <span className="material-symbols-outlined text-sm">map</span>
-                                                </button>
-                                                <button
-                                                    onClick={(event) => {
-                                                        event.stopPropagation();
-                                                        navigate(`/detail/${index}`);
-                                                    }}
-                                                    className="text-label-sm font-bold text-on-surface-variant hover:text-primary flex items-center gap-1"
-                                                >
-                                                    Détail
-                                                    <span className="material-symbols-outlined text-sm">arrow_forward</span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </article>
-                                    );
-                                })}
+                        {!selectedTable && (
+                            <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-40 bg-surface-container-lowest/90 backdrop-blur border border-outline-variant rounded-full px-4 py-2 shadow-lg text-label-sm text-on-surface-variant">
+                                Clique sur un pin pour voir la table
                             </div>
-                        </div>
+                        )}
                     </main>
                     <BottomNavBar />
                 </div>
@@ -819,6 +826,8 @@
             const tables = getPingPongTables();
             const weather = useParisWeather();
             const [searchQuery, setSearchQuery] = useState("");
+            const [selectedSpotIndex, setSelectedSpotIndex] = useState(null);
+            window.setSelectedSpotIndex = setSelectedSpotIndex;
             const normalizedQuery = searchQuery.trim().toLowerCase();
             const filteredTables = normalizedQuery
                 ? tables.filter((table) =>
