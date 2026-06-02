@@ -657,6 +657,13 @@
             const selectedIndex = Number.isInteger(parseInt(spotId)) ? parseInt(spotId) : 0;
             const table = tables[selectedIndex] || tables[0];
             const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${table.lat},${table.lng}`;
+            const [joined, setJoined] = useState(false);
+
+const weather = {
+    temp: 18,
+    condition: "☀️ Perfect conditions",
+    wind: "8 km/h"
+};
 
             return (
                 <div className="bg-surface min-h-screen">
