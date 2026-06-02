@@ -393,40 +393,103 @@
             return tables;
         };
 
+        const getParisWeather = async () => {
+            try {
+                const response = await fetch(
+                    "https://api.open-meteo.com/v1/forecast?latitude=48.8566&longitude=2.3522&current=temperature_2m,wind_speed_10m,weather_code"
+                );
+
+                if (!response.ok) {
+                    throw new Error("Weather request failed");
+                }
+
+                const data = await response.json();
+                const current = data.current || {};
+
+                return {
+                    temp: Math.round(current.temperature_2m),
+                    wind: Math.round(current.wind_speed_10m),
+                    code: current.weather_code
+                };
+            } catch (error) {
+                console.error("Weather API error:", error);
+                return null;
+            }
+        };
+
+        const getWeatherIcon = (code) => {
+            if (code === 0) return "☀️";
+            if ([1, 2, 3].includes(code)) return "🌤️";
+            if ([45, 48].includes(code)) return "🌫️";
+            if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(code)) return "🌧️";
+            if ([71, 73, 75, 77, 85, 86].includes(code)) return "❄️";
+            if ([95, 96, 99].includes(code)) return "⛈️";
+            return "🌤️";
+        };
+
+        const useParisWeather = () => {
+            const [weather, setWeather] = useState(null);
+
+            useEffect(() => {
+                let isMounted = true;
+                getParisWeather().then((result) => {
+                    if (isMounted) setWeather(result);
+                });
+                return () => {
+                    isMounted = false;
+                };
+            }, []);
+
+            return weather;
+        };
+
+        const WeatherMini = ({ weather }) => (
+            <span className="inline-flex items-center gap-1 bg-white/90 text-on-surface px-3 py-1 rounded-full text-label-sm font-bold shadow-sm">
+                <span>{weather ? getWeatherIcon(weather.code) : "⏳"}</span>
+                <span>{weather ? `${weather.temp}°` : "--°"}</span>
+            </span>
+        );
+
+        const WeatherBlock = ({ weather }) => (
+            <div className="mt-4 p-4 bg-surface-container rounded-xl border border-outline-variant">
+                <div className="flex justify-between items-center gap-4">
+                    <div>
+                        <p className="font-label-md flex items-center gap-2">
+                            <span>{weather ? getWeatherIcon(weather.code) : "⏳"}</span>
+                            <span>{weather ? "Météo Paris" : "Chargement météo"}</span>
+                        </p>
+                        <p className="text-sm text-on-surface-variant">
+                            Conditions actuelles pour jouer dehors
+                        </p>
+                    </div>
+
+                    <div className="text-right shrink-0">
+                        <div className="text-2xl font-bold">
+                            {weather ? `${weather.temp}°` : "--°"}
+                        </div>
+                        <div className="text-sm text-on-surface-variant">
+                            Vent {weather ? weather.wind : "--"} km/h
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+
         // --- Screen 3: Map Explorer ---
         const MapPage = () => {
             const navigate = useNavigate();
 
             const tables = getPingPongTables();
+            const weather = useParisWeather();
             const [searchQuery, setSearchQuery] = useState("");
-            const [userLocation, setUserLocation] = useState(null);
-
-            const getDistanceKm = (lat1, lng1, lat2, lng2) => {
-                const earthRadius = 6371;
-                const dLat = (lat2 - lat1) * Math.PI / 180;
-                const dLng = (lng2 - lng1) * Math.PI / 180;
-                const a =
-                    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                    Math.sin(dLng / 2) * Math.sin(dLng / 2);
-                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-                return earthRadius * c;
-            };
-
             const normalizedQuery = searchQuery.trim().toLowerCase();
-            const filteredTables = (normalizedQuery
+            const filteredTables = normalizedQuery
                 ? tables.filter((table) =>
                     table.name.toLowerCase().includes(normalizedQuery) ||
                     table.district.toLowerCase().includes(normalizedQuery) ||
                     table.tables.toLowerCase().includes(normalizedQuery)
                   )
-                : tables
-            ).sort((a, b) => {
-                if (!userLocation) return 0;
-                const distanceA = getDistanceKm(userLocation.lat, userLocation.lng, a.lat, a.lng);
-                const distanceB = getDistanceKm(userLocation.lat, userLocation.lng, b.lat, b.lng);
-                return distanceA - distanceB;
-            });
+                : tables;
 
             const focusFirstResult = () => {
                 if (!filteredTables.length) return;
@@ -475,7 +538,8 @@
                         .bindPopup(`
                             <strong>${table.name}</strong><br />
                             ${table.district}<br />
-                            ${table.tables} · Free access
+                            ${table.tables} · Free access<br />
+                            Weather: Paris live API
                         `)
                         .on("click", () => navigate(`/detail/${index}`));
 
@@ -490,50 +554,18 @@
                     marker.openPopup();
                 };
 
-                let userMarker = null;
-                let userCircle = null;
-
                 window.locateUser = () => {
-                    if (!navigator.geolocation) {
-                        alert("La géolocalisation n'est pas disponible sur ce navigateur.");
-                        return;
-                    }
-
-                    navigator.geolocation.getCurrentPosition(
-                        (position) => {
-                            const { latitude, longitude, accuracy } = position.coords;
-                            setUserLocation({ lat: latitude, lng: longitude });
-
-                            map.setView([latitude, longitude], 15, { animate: true });
-
-                            if (userMarker) map.removeLayer(userMarker);
-                            if (userCircle) map.removeLayer(userCircle);
-
-                            userCircle = L.circle([latitude, longitude], {
-                                radius: accuracy || 80,
-                                color: "#0054cc",
-                                fillColor: "#0054cc",
-                                fillOpacity: 0.12,
-                                weight: 2
-                            }).addTo(map);
-
-                            userMarker = L.circleMarker([latitude, longitude], {
-                                radius: 9,
-                                color: "#ffffff",
-                                weight: 3,
-                                fillColor: "#0054cc",
-                                fillOpacity: 1
-                            }).addTo(map).bindPopup("📍 Vous êtes ici").openPopup();
-                        },
-                        () => {
-                            alert("Impossible d'accéder à votre position. Autorisez la localisation dans votre navigateur.");
-                        },
-                        {
-                            enableHighAccuracy: true,
-                            timeout: 10000,
-                            maximumAge: 60000
-                        }
-                    );
+                    if (!navigator.geolocation) return;
+                    navigator.geolocation.getCurrentPosition((position) => {
+                        const { latitude, longitude } = position.coords;
+                        map.setView([latitude, longitude], 15);
+                        L.circleMarker([latitude, longitude], {
+                            radius: 8,
+                            color: "#0054cc",
+                            fillColor: "#0054cc",
+                            fillOpacity: 0.8
+                        }).addTo(map).bindPopup("You are here").openPopup();
+                    });
                 };
             }, [navigate]);
 
@@ -564,8 +596,11 @@
                             </div>
                         </div>
 
-                        <div className="absolute top-40 right-4 z-40">
-                            <button onClick={() => window.locateUser && window.locateUser()} title="Utiliser ma position" className="flex items-center justify-center w-12 h-12 bg-surface-container-lowest rounded-full shadow-lg border border-outline-variant text-primary active:scale-90 transition-all hover:bg-primary-fixed">
+                        <div className="absolute top-40 right-4 z-40 flex flex-col gap-3 items-end">
+                            <div className="bg-surface-container-lowest/95 backdrop-blur rounded-full shadow-lg border border-outline-variant px-3 py-2">
+                                <WeatherMini weather={weather} />
+                            </div>
+                            <button onClick={() => window.locateUser && window.locateUser()} className="flex items-center justify-center w-12 h-12 bg-surface-container-lowest rounded-full shadow-lg border border-outline-variant text-primary active:scale-90 transition-all">
                                 <span className="material-symbols-outlined">my_location</span>
                             </button>
                         </div>
@@ -574,7 +609,7 @@
                         <div className="absolute bottom-24 left-0 w-full z-40">
                             <div className="px-margin-mobile flex justify-between items-end mb-4">
                                 <h2 className="font-headline-md text-headline-md text-on-surface bg-surface-container-lowest/85 backdrop-blur px-4 py-1 rounded-lg">
-                                    {userLocation ? "Tables proches" : "Tables à Paris"}
+                                    Tables à Paris
                                 </h2>
                                 <button className="text-label-md font-bold text-primary bg-surface-container-lowest/85 backdrop-blur px-4 py-1 rounded-full hover:underline">
                                     {filteredTables.length} / {tables.length} spots
@@ -597,6 +632,9 @@
                                                 alt={table.name}
                                             />
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                                            <div className="absolute top-2 left-2">
+                                                <WeatherMini weather={weather} />
+                                            </div>
                                             <div className="absolute top-2 right-2 bg-surface-container-lowest/90 backdrop-blur p-2 rounded-full">
                                                 <span className="material-symbols-outlined text-primary text-lg" style={{fontVariationSettings: "'FILL' 1"}}>favorite</span>
                                             </div>
@@ -614,12 +652,9 @@
                                                 </div>
                                             </div>
                                             <p className="text-on-surface-variant text-label-sm mb-1">{table.district}</p>
-                                            {userLocation && (
-                                                <p className="text-primary text-label-sm font-bold mb-3">
-                                                    {getDistanceKm(userLocation.lat, userLocation.lng, table.lat, table.lng).toFixed(1)} km de vous
-                                                </p>
-                                            )}
-                                            {!userLocation && <div className="mb-3"></div>}
+                                            <p className="text-on-surface-variant text-label-sm mb-3">
+                                                {weather ? `${getWeatherIcon(weather.code)} ${weather.temp}° · Vent ${weather.wind} km/h` : "Météo en chargement..."}
+                                            </p>
                                             <div className="flex items-center justify-between">
                                                 <button className="text-label-sm font-bold text-primary flex items-center gap-1">
                                                     Voir sur la carte
@@ -653,17 +688,12 @@
             const navigate = useNavigate();
             const { spotId } = useParams();
             const [favorite, setFavorite] = useState(false);
+            const [joined, setJoined] = useState(false);
+            const weather = useParisWeather();
             const tables = getPingPongTables();
             const selectedIndex = Number.isInteger(parseInt(spotId)) ? parseInt(spotId) : 0;
             const table = tables[selectedIndex] || tables[0];
             const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${table.lat},${table.lng}`;
-            const [joined, setJoined] = useState(false);
-
-const weather = {
-    temp: 18,
-    condition: "☀️ Perfect conditions",
-    wind: "8 km/h"
-};
 
             return (
                 <div className="bg-surface min-h-screen">
@@ -690,7 +720,8 @@ const weather = {
                                 Free access
                             </span>
                             <h1 className="font-headline-lg-mobile md:font-headline-lg text-white mb-1">{table.name}</h1>
-                            <p className="font-body-md text-white/85">{table.district}</p>
+                            <p className="font-body-md text-white/85 mb-3">{table.district}</p>
+                            <WeatherMini weather={weather} />
                         </div>
                     </header>
 
@@ -710,6 +741,7 @@ const weather = {
                                         <span className="material-symbols-outlined text-[18px]">location_on</span>
                                         <p className="font-body-md">{table.district}, Paris</p>
                                     </div>
+                                    <WeatherBlock weather={weather} />
                                 </div>
 
                                 <hr className="border-outline-variant my-8" />
@@ -718,6 +750,7 @@ const weather = {
                                     {[
                                         {icon: 'sports_tennis', title: table.tables, sub: 'Table extérieure'},
                                         {icon: 'payments', title: 'Free access', sub: 'Libre-service'},
+                                        {icon: 'wb_sunny', title: weather ? `${weather.temp}°` : '--°', sub: weather ? `Vent ${weather.wind} km/h` : 'Météo'},
                                         {icon: 'place', title: table.district, sub: 'Paris'},
                                         {icon: 'backpack', title: 'BYO Rackets', sub: 'Bring gear'}
                                     ].map((feat, i) => (
@@ -745,6 +778,9 @@ const weather = {
                                     <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="w-full bg-primary text-on-primary h-14 rounded-lg font-label-md flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-transform">
                                         <span className="material-symbols-outlined">directions_run</span>Go there
                                     </a>
+                                    <button onClick={() => setJoined(!joined)} className="w-full mt-3 bg-tertiary text-white h-14 rounded-lg font-label-md flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-transform">
+                                        <span className="material-symbols-outlined">sports_tennis</span>{joined ? "Joined ✅" : "Join Game"}
+                                    </button>
                                     <button onClick={() => navigate('/map')} className="w-full mt-3 border border-outline-variant text-on-surface h-12 rounded-lg font-label-md flex items-center justify-center gap-2 active:scale-95 transition-transform">
                                         <span className="material-symbols-outlined">map</span>Back to map
                                     </button>
@@ -758,7 +794,12 @@ const weather = {
                             <p className="font-label-md truncate">{table.name}</p>
                             <p className="font-body-sm text-on-surface-variant">{table.tables} · Free access</p>
                         </div>
-                        <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="bg-primary text-on-primary px-6 py-3 rounded-lg font-label-md shadow-md shrink-0">Go there</a>
+                        <div className="flex gap-2 shrink-0">
+                            <button onClick={() => setJoined(!joined)} className="bg-tertiary text-white px-4 py-3 rounded-lg font-label-md shadow-md">
+                                {joined ? "Joined" : "Join"}
+                            </button>
+                            <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="bg-primary text-on-primary px-5 py-3 rounded-lg font-label-md shadow-md">Go</a>
+                        </div>
                     </div>
                 </div>
             );
@@ -768,35 +809,16 @@ const weather = {
         const ExplorePage = () => {
             const navigate = useNavigate();
             const tables = getPingPongTables();
+            const weather = useParisWeather();
             const [searchQuery, setSearchQuery] = useState("");
-            const [userLocation, setUserLocation] = useState(null);
-
-            const getDistanceKm = (lat1, lng1, lat2, lng2) => {
-                const earthRadius = 6371;
-                const dLat = (lat2 - lat1) * Math.PI / 180;
-                const dLng = (lng2 - lng1) * Math.PI / 180;
-                const a =
-                    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                    Math.sin(dLng / 2) * Math.sin(dLng / 2);
-                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-                return earthRadius * c;
-            };
-
             const normalizedQuery = searchQuery.trim().toLowerCase();
-            const filteredTables = (normalizedQuery
+            const filteredTables = normalizedQuery
                 ? tables.filter((table) =>
                     table.name.toLowerCase().includes(normalizedQuery) ||
                     table.district.toLowerCase().includes(normalizedQuery) ||
                     table.tables.toLowerCase().includes(normalizedQuery)
                   )
-                : tables
-            ).sort((a, b) => {
-                if (!userLocation) return 0;
-                const distanceA = getDistanceKm(userLocation.lat, userLocation.lng, a.lat, a.lng);
-                const distanceB = getDistanceKm(userLocation.lat, userLocation.lng, b.lat, b.lng);
-                return distanceA - distanceB;
-            });
+                : tables;
 
             return (
                 <div className="bg-surface min-h-screen">
@@ -806,6 +828,7 @@ const weather = {
                             <span className="font-label-sm text-label-sm text-primary uppercase tracking-widest">Explore</span>
                             <h1 className="font-headline-lg-mobile md:font-headline-lg text-on-surface mt-2 mb-3">Toutes les tables</h1>
                             <p className="font-body-md text-on-surface-variant">Recherche par nom, arrondissement ou nombre de tables.</p>
+                            <WeatherBlock weather={weather} />
                         </div>
 
                         <div className="sticky top-20 z-30 mb-6 bg-surface/90 backdrop-blur py-3">
@@ -936,19 +959,6 @@ const weather = {
 
         // --- Main App Component ---
         const App = () => {
-            async function getParisWeather() {
-
-    const response = await fetch(
-        "https://api.open-meteo.com/v1/forecast?latitude=48.8566&longitude=2.3522&current=temperature_2m,wind_speed_10m"
-    );
-
-    const data = await response.json();
-
-    return {
-        temp: Math.round(data.current.temperature_2m),
-        wind: Math.round(data.current.wind_speed_10m)
-    };
-}
             return (
                 <MemoryRouter>
                     <Routes>
