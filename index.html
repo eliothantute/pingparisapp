@@ -4,6 +4,14 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport">
     <title>Ping Paris | Find Your Table</title>
+    <!-- PWA Install -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ba0036">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Ping Paris">
+    <link rel="apple-touch-icon" href="icon-192.png">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -925,6 +933,12 @@
                                     <div className="text-center md:text-left"><div className="font-headline-md text-primary">28</div><div className="text-label-sm uppercase">Games</div></div>
                                     <div className="text-center md:text-left"><div className="font-headline-md text-primary">9.8</div><div className="text-label-sm uppercase">Rep</div></div>
                                 </div>
+                                <button
+                                    onClick={() => alert("Pour installer Ping Paris :\n\niPhone : Partager → Ajouter à l’écran d’accueil\nAndroid : Menu Chrome → Installer l’application")}
+                                    className="mt-6 bg-primary text-on-primary px-6 py-3 rounded-xl font-label-md shadow-md active:scale-95 transition-transform"
+                                >
+                                    Download App
+                                </button>
                             </div>
                         </div>
                         <div className="border-b border-outline-variant mb-8 flex gap-8 overflow-x-auto no-scrollbar">
@@ -976,6 +990,15 @@
         const container = document.getElementById('root');
         const root = createRoot(container);
         root.render(<App />);
+    </script>
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./service-worker.js')
+            .catch((error) => console.log('Service Worker registration failed:', error));
+        });
+      }
     </script>
 </body>
 </html>
