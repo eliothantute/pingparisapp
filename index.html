@@ -239,63 +239,58 @@
                 </nav>
             );
         };
+// --- Screen 1: Onboarding ---
+const OnboardingPage = () => {
+    const navigate = useNavigate();
 
-        // --- Screen 1: Onboarding ---
-        const OnboardingPage = () => {
-            const navigate = useNavigate();
-            return (
-                <div className="relative min-h-screen overflow-hidden">
-                    <div className="fixed inset-0 z-0">
-                        <img alt="Paris Landscape" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFDYbXkF9pesqOXUEbS48cGNRofDMEZNYHXIePLHZb3fnuzcJX1NsdIkBHg2XThuq0azHiaCrphjc1gA8mm2vFutMmUm8i_NG7GrCnWDrdKIFu1r9B9HXISOOQpHuWZt8HhGXRNwiBFX8DhQxCFzf6nlIQTUDg51mH6YydnKbssfpBm5lnIoUAnZzzR71oOd06U9gN4AQay5VcJ6aGlyV5h-tmU4ihsaREYQdGoXa-RRWa6sX11Rlzg8YAdDP3xofFXXqltYF0koMl" />
-                        <div className="absolute inset-0 hero-gradient"></div>
+    return (
+        <div className="relative min-h-screen overflow-hidden">
+            <div className="fixed inset-0 z-0">
+                <img
+                    alt="Paris Landscape"
+                    className="w-full h-full object-cover"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFDYbXkF9pesqOXUEbS48cGNRofDMEZNYHXIePLHZb3fnuzcJX1NsdIkBHg2XThuq0azHiaCrphjc1gA8mm2vFutMmUm8i_NG7GrCnWDrdKIFu1r9B9HXISOOQpHuWZt8HhGXRNwiBFX8DhQxCFzf6nlIQTUDg51mH6YydnKbssfpBm5lnIoUAnZzzR71oOd06U9gN4AQay5VcJ6aGlyV5h-tmU4ihsaREYQdGoXa-RRWa6sX11Rlzg8YAdDP3xofFXXqltYF0koMl"
+                />
+                <div className="absolute inset-0 hero-gradient"></div>
+            </div>
+
+            <main className="relative z-10 flex min-h-screen items-center justify-center px-margin-mobile">
+                <section className="glass-panel w-full max-w-[440px] rounded-3xl p-8 md:p-10 shadow-2xl flex flex-col items-center text-center border border-white/20 animate-in fade-in zoom-in duration-700">
+
+                    <img
+                        src="icon-512.png"
+                        alt="Ping Paris"
+                        className="w-32 h-32 rounded-3xl mb-6 object-cover"
+                    />
+
+                    <h1 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-3 tracking-tight">
+                        Ping Paris
+                    </h1>
+
+                    <p className="font-body-md text-body-md text-on-surface-variant mb-8 px-2">
+                        Trouve une table de ping-pong à Paris selon ton quartier et ton moment.
+                    </p>
+
+                    <div className="w-full mb-8 bg-surface-container-low border border-outline-variant p-4 rounded-2xl">
+                        <div className="font-headline-md text-headline-md text-primary">500+</div>
+                        <div className="font-label-sm text-label-sm text-on-surface-variant">tables référencées</div>
                     </div>
-                    <main className="relative z-10 flex min-h-screen items-center justify-center px-margin-mobile">
-                        <section className="glass-panel w-full max-w-[440px] rounded-3xl p-8 md:p-10 shadow-2xl flex flex-col items-center text-center border border-white/20 animate-in fade-in zoom-in duration-700">
-                            <div className="mb-8 p-4 bg-primary/10 rounded-full">
-                                <span className="material-symbols-outlined text-primary text-4xl">sports_tennis</span>
-                            </div>
-                            <h1 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-3 tracking-tight">
-                                Find your table. Meet your match.
-                            </h1>
-                            <p className="font-body-md text-body-md text-on-surface-variant mb-8 px-2">
-                                Join the most active street sports community in Paris.
-                            </p>
-                            <div className="grid grid-cols-2 gap-4 w-full mb-10">
-                                <div className="bg-surface-container-low border border-outline-variant p-4 rounded-2xl">
-                                    <div className="font-headline-md text-headline-md text-primary">500+</div>
-                                    <div className="font-label-sm text-label-sm text-on-surface-variant">Tables</div>
-                                </div>
-                                <div className="bg-surface-container-low border border-outline-variant p-4 rounded-2xl flex flex-col items-center justify-center">
-                                    <span className="material-symbols-outlined text-tertiary mb-1">groups</span>
-                                    <div className="font-label-md text-label-md text-on-surface">Community</div>
-                                </div>
-                            </div>
-                            <div className="w-full space-y-4">
-                                <button onClick={() => navigate('/signup')} className="w-full bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md h-14 rounded-xl transition-all active:scale-95 shadow-md flex items-center justify-center gap-2 group">
-                                    Let's Play
-                                    <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
-                                </button>
-                                <div className="pt-4">
-                                    <button onClick={() => navigate('/signup')} className="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors flex items-center justify-center w-full gap-1">
-                                        Already a member? <span className="text-primary font-bold">Sign In</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="mt-10 pt-8 border-t border-outline-variant w-full">
-                                <div className="flex items-center justify-center gap-2 mb-2">
-                                    <div className="flex -space-x-2">
-                                        <img className="w-8 h-8 rounded-full border-2 border-white object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlYo-NA8TW1NFMFDTnxk8FA3aPp3YVmyEfUaDz3Bv_6_grbCWYg5p7fX9Ge51PsHxBhG1bPhlgkGv7RJfsUVbMm8RlZ9IZ0A587KDugd5pDUiwQHyqMu6itGr53U2HXbOqaZDKqG_PJCen-FU6z_VLzE2qDaXT866opjZqDEDtwX_CVEX9SNtrloMt-iFhHM5ncyp4GSUGGDcj91rd2z0hny22l3hTQsrJaZM9kSMvMFvhV3LLPFf6sdHW57DB20NCfaKYQycWJa2Q" />
-                                        <img className="w-8 h-8 rounded-full border-2 border-white object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmJ0HHglub4G2TNm6emROYg1wGkAG8XciB_59qse2vEAB0dz9_3QpRaRlgIUzIDOOPjox2SIgJSgJrc9msEdBcXVbAyV-0H7dZboqOkxQR8JRZiSboSjoGUEpl07xe-OjUFd8ra623XdjLni2UnbDXuGjeiLqWcabaPGY6brls98SvXGbE2RL3dx3pNYNfTd6H6tGebsoW1VZ8bZPfsoSmhUdSe67m5dgM0_SfnZ4W6vFwFX9EH6AnAZLDwBSbbveSRKFeSO4yCMbQ" />
-                                        <img className="w-8 h-8 rounded-full border-2 border-white object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrnK8owqR07yuqxLjx3VaGck7Q96Q53g2W1wiGLP-KdTpJlCPSxcPUi8FF4UGqmrJMQpOTHY-lYOTn9CrdLq_52j3U7btiykczI9YUfkwyG0rJXwHthfKxT1rDob7MRD07ow4FTBecAjEgh0fwmG8dslLuh0xQ2YSIq-oSs0CnzVltI5JeTRkAXTvvnIjKHbegJdBDjFayomGFA2kHl1jELBQ__SLNH4-BbBaTHZ9BmPi1Bhtgm14ozFbdKv73f6woNCeg2JhiFMDZ" />
-                                    </div>
-                                    <span className="font-label-sm text-label-sm text-on-surface-variant">Join 2,400+ players today</span>
-                                </div>
-                            </div>
-                        </section>
-                    </main>
-                </div>
-            );
-        };
+
+                    <button
+                        onClick={() => navigate('/map')}
+                        className="w-full bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md h-14 rounded-xl transition-all active:scale-95 shadow-md flex items-center justify-center gap-2 group"
+                    >
+                        Trouver une table
+                        <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">
+                            arrow_forward
+                        </span>
+                    </button>
+
+                </section>
+            </main>
+        </div>
+    );
+};
 
         // --- Screen 2: Sign Up ---
         const SignUpPage = () => {
